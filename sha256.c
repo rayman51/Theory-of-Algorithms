@@ -3,11 +3,9 @@
 // https://ws680.nist.gov/publication/get_pdf.cfm?pub_id=919060 
 
 // The usual input/output header file
-
 #include <stdio.h>
 // For using fixed bit integers
 #include <stdint.h>
-
 
 void sha256();
 
@@ -26,6 +24,9 @@ uint32_t SIG1(uint32_t x);
 // See Section 4.1.2 for definitions.
 uint32_t Ch(uint32_t x, uint32_t y, uint32_t z);
 uint32_t Maj(uint32_t x, uint32_t y, uint32_t z);
+
+int nextMsgBlock();
+
 
 
 int main(int argc, char *argv[]){
