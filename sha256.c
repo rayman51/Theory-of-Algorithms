@@ -6,8 +6,16 @@
 #include <stdio.h>
 // For using fixed bit integers
 #include <stdint.h>
+// Represents a message block
+union msgblock {
+  uint8_t  e[64];
+  uint32_t t[16];
+  uint64_t s[8];
+};
 
-void sha256();
+// A flag for where we are in reading the file
+enum status {READ , PAD0, PAD1, FINISH};
+
 
 // See Section 4.1.2 for definitions.
 uint32_t sig0(uint32_t x);
@@ -25,22 +33,34 @@ uint32_t SIG1(uint32_t x);
 uint32_t Ch(uint32_t x, uint32_t y, uint32_t z);
 uint32_t Maj(uint32_t x, uint32_t y, uint32_t z);
 
-int nextMsgBlock();
+// Calculates the SHA256 hash of a file
+void sha256();
 
+// Retrieves the next message block
+int nextmsgblock(FILE *f, union msgblock *M, enum status *S, int *nobits);
 
-
+// Start of the show
 int main(int argc, char *argv[]){
-  
-  sha256();
+  FILE* f;
+  f = fopen(argv[1], "r");
+ 
+  sha256(f);
 
   return 0;
 }//main
 
 
 void sha256(){
+  // The current message block
+  union msgblock M;
+  //  The number of bits read from the file
+  uint64_t nobits = 0;
+  // The status of the message blocks interms of padding
+  enum status S = READ;
+
 
   // The K constants, defined in Section 4.2.2.
-uint32_t K[] = {
+  uint32_t K[] = {
  
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
     0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -83,17 +103,16 @@ uint32_t K[] = {
     , 0x5be0cd19
   };
 
-  // The current message block.
-  uint32_t M[16] = {0, 0, 0, 0, 0, 0, 0, 0};
-
   // For looping
   int i, t;
+
+
   // loops through the message blocks
-  for(i = 0; i < 1; i++) {
+  while (nextmsgblock(f, M, S, nobits)) {
 
    // From page 22, W[t] = M[t] for 0 <= t <= 15.
    for (t = 0; t < 16; t++)
-      W[t] = M[t];
+      W[t] = M.t[t];
   
     // From page 22, T[t] = ...
    for (t = 16; t < 64; t++)
@@ -169,6 +188,50 @@ uint32_t Maj(uint32_t x, uint32_t y, uint32_t z){
   return (x & y) ^ (x & z) ^ (y & z);
 }//Maj
 
+int nextMsgBlock(FILE *f, union msgblock *M, enum status *S, int *nobits){
 
+  // The number of bytes we get from thr fread
+  uint64_t nobytes;
+
+  // For looping
+  int i;
+
+  while (S == READ) {
+    nobytes = fread(M.e, 1, 64, f);
+    printf("Read %2llu bytes \n", nobytes);
+    nobits = nobits + (nobytes * 8);
+
+    if (nobytes < 56){
+      printf("I've found a block with less than 55 bytes !\n");
+      M.e[nobytes] = 0x80;
+      while (nobytes < 56) {
+        nobytes = nobytes + 1;
+        M.e[nobytes] = 0x00; 
+      }//while
+
+      M.s[7] = nobits; 
+      S = FINISH;
+    }//if
+    else if (nobytes < 64) {
+      S = PAD0;
+      M.e[nobytes] = 0x80;
+      while (nobytes < 64) {
+          nobytes = nobytes + 1;
+          M.e[nobytes] = 0x00; 
+        }//while
+    }//else if
+
+    // Has everything finished reading from file and was it a multiple of 512
+    else if (feof(f)){
+      S = PAD1;
+    }//else if 
+  }//while
+
+  if (S == PAD0 || S == PAD1){
+    for (i = 0; i < 56; i++) {
+          M.e[i] = 0x00;
+    }     
+     M.s[7] = nobits; 
+    
 
 
