@@ -85,6 +85,7 @@ The program will then print to screen the hash value of the file you passed it.
 ## Useful Resources
 
 [SHA256](https://en.wikipedia.org/wiki/SHA-2)
+
 [Link to FEDERAL INFORMATION PROCESSING STANDARDS for Secure Hash Standard (SHS) ](https://ws680.nist.gov/publication/get_pdf.cfm?pub_id=919060 )
 
 Many thanks to Dr. Ian McLoughlin (GMIT) for the video lectures provided to create this project
