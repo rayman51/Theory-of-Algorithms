@@ -5,7 +5,7 @@ For my Theory of Algoritms module, I was asked to create a Sha256 encryption pro
 in C using [VI editor](https://en.wikipedia.org/wiki/Vi) on a [Google Clould Virtual Machine](https://cloud.google.com/compute/docs/instances/) running a [Debian GNU/Linux9](https://www.debian.org/) operating system.
 
 ### SHA256 Secure Hash Algorithm
-A secure hash algorithm or SHA is a set of cryptographic hash functions designed by the United States National Security Agency. The reason for using this algorithm is to encrypt data so that the resulting output would be complete indistinguishable from the input data and would be very difficult to determine the input even if the output is known.
+A secure hash algorithm or SHA is a set of cryptographic hash functions designed by the United States National Security Agency. The reason for using this algorithm is to encrypt data so that the resulting output would be completely indistinguishable from the input data and would be very difficult to determine the input even if the output is known.
 
 The algorithm shown here is the [SHA256](https://en.wikipedia.org/wiki/SHA-2) algorithm. Its is a keyless encryption method as it does not use any form of key to encrypt the data, which technically means it is not an encryption, but actually a hashing function. It uses a one way compression format, meaning that it cannot be undone, or at the very least very difficult to undo the output or convert back to the original input. 
 
@@ -48,7 +48,7 @@ and the 64 binary words K given by the 32 first bits of the fractional parts of 
 
 
 ## Padding
-SHA 256 works by reading message block of size 512, with the last 64 bits of the block left to denote the size of the original message. When the program reads in the file, it takes the bits of all the data and adds it up. It then add a one and pads the message block out with zeros to 448 bits. 512 - 64 = 448.
+SHA 256 works by reading message blocks of size 512, with the last 64 bits of the block left to denote the size of the original message. When the program reads in the file, it takes the bits of all the data and adds it up. It then adds a one to the end of the message and pads the message block out with zeros to 448 bits. 512 - 64 = 448.
 
 So, if a message was 3 characters with 8 bits each, 3 X 8 = 24
 
@@ -58,7 +58,7 @@ The program will pad the message out with 423 zeros 448 - 25 = 423
 
 Leaving the last 64 bits so that a number representing the bits in the original message can be added to the block. 
 
-If a message message contains more than 512 bit then multiple blocks of 512 are used
+If a message contains more than 512 bits then multiple blocks of 512 are used
 
 If a message is 765 bits in size, the first block will take the first 512 bits
 
