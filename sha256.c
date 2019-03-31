@@ -7,7 +7,7 @@
 #include <stdio.h>
 // For using fixed bit integers
 #include <stdint.h>
-
+#include <unistd.h>
 // Represents a message block.
 union msgblock {
   uint8_t e[64];
@@ -47,13 +47,18 @@ int main(int argc, char *argv[]){
   // Open the file given as first command line argument.
   FILE* msgf;
   msgf = fopen(argv[1], "r");
-  // Should do error checking here.
 
-  // Run the secure hash algorithm on the file.
-  sha256(msgf);
-  // Close the file.
-  fclose(msgf);
+  //if given empty file prints error. Otherwise passes file to sha256.  
+  if( access( argv[1], F_OK) != -1){
 
+    // Run the secure hash algorithm on the file.
+    sha256(msgf);
+    // Close the file.
+    fclose(msgf);
+  }else {
+    printf("File doesnt exist\n");
+
+  }
   return 0;
 }//main
 
