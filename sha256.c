@@ -153,7 +153,7 @@ void sha256(FILE *msgf){
     H[6] = g + H[6]; H[7] = h + H[7];
 
   }//while
-
+  printf("Hash value of file is : \n");
   printf("%08x %08x %08x %08x %08x %08x %08x %08x\n", H[0], H[1], H[2], H[3], H[4], H[5], H[6], H[7]);
  
 }//sha256
