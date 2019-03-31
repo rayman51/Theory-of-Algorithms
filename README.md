@@ -28,7 +28,11 @@ sig1(X) = RotR(X, 17) ⊕ RotR(X, 19) ⊕ ShR(X, 10).
 
 *Boolean operations AND, XOR and OR, are denoted by ∧, ⊕ and ∨, respectively*
 
-and the 64 binary words K given by the 32 first bits of the fractional parts of the cube roots of the first
+*RotR(A, n) denotes the circular right shift of n bits of the binary word A*
+
+*ShR(A, n) denotes the right shift of n bits of the binary word A*
+
+Along with the 64 binary words K given by the 32 first bits of the fractional parts of the cube roots of the first
 64 prime numbers:
 
 
